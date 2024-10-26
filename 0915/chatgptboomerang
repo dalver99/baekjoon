@@ -1,0 +1,72 @@
+import sys
+import threading
+
+def main():
+    import sys
+    sys.setrecursionlimit(1 << 25)
+    N, M = map(int, sys.stdin.readline().split())
+    grid = []
+    for _ in range(N):
+        grid.append(list(map(int, sys.stdin.readline().split())))
+
+    # Precompute the boomerang shapes and their relative positions
+    boomerang_shapes = [
+        # Shape 1: center, right, down
+        [(0, 0), (0, 1), (1, 0)],
+        # Shape 2: center, left, down
+        [(0, 0), (0, -1), (1, 0)],
+        # Shape 3: center, left, up
+        [(0, 0), (0, -1), (-1, 0)],
+        # Shape 4: center, right, up
+        [(0, 0), (0, 1), (-1, 0)],
+    ]
+
+    N_cells = N * M
+    memo = {}
+
+    def dp(used_mask):
+        if used_mask in memo:
+            return memo[used_mask]
+        max_strength = 0
+        for r in range(N):
+            for c in range(M):
+                idx = r * M + c
+                if not (used_mask & (1 << idx)):
+                    for shape in boomerang_shapes:
+                        valid = True
+                        cells = []
+                        strength = 0
+                        for dr, dc in shape:
+                            nr, nc = r + dr, c + dc
+                            if 0 <= nr < N and 0 <= nc < M:
+                                n_idx = nr * M + nc
+                                if used_mask & (1 << n_idx):
+                                    valid = False
+                                    break
+                                cells.append((nr, nc, n_idx))
+                            else:
+                                valid = False
+                                break
+                        if valid:
+                            # Mark cells as used
+                            new_used_mask = used_mask
+                            boomerang_strength = 0
+                            for i, j, n_idx in cells:
+                                new_used_mask |= (1 << n_idx)
+                                cell_strength = grid[i][j]
+                                if i == r and j == c:
+                                    boomerang_strength += cell_strength * 2
+                                else:
+                                    boomerang_strength += cell_strength
+                            # Recurse
+                            total_strength = boomerang_strength + dp(new_used_mask)
+                            if total_strength > max_strength:
+                                max_strength = total_strength
+        memo[used_mask] = max_strength
+        return max_strength
+
+    result = dp(0)
+    print(result)
+
+if __name__ == "__main__":
+    threading.Thread(target=main).start()
