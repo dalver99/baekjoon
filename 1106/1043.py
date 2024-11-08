@@ -18,21 +18,24 @@ for i in range(M):
 #print(party_people)
 flag = True
 while flag:
+    #print("REPEAT")
     flag = True
+    updated = False
     for idx, party in enumerate(party_people):
-        if any(those_who_know_the_truth) in party:
+        if any(person in those_who_know_the_truth for person in party):            
+            updated = True
             #이걸 언제까지 반복해야함? - 단 한번도 진실을 아는사람이 파티에 참여하지 않을때까지!!
-            flag = False
             #그 파티에 나머지 사람들도 다 truth list에 추가하고
             for person in party:
-                print("ITERATING",person)
+                # print("ITERATING",person)
                 if person not in those_who_know_the_truth:
                     those_who_know_the_truth.append(person)
-                    print("UPDATED WHO KNOW THE TRUTH",those_who_know_the_truth)
-                    flag = True
+                    # print("UPDATED WHO KNOW THE TRUTH",those_who_know_the_truth)
             #그 파티를 삭제해야됨
             party_people.pop(idx)
-            print("UPDATED PARTY", party_people)
+            #print("UPDATED PARTY", party_people)
+    if not updated:
+        flag = False
     
-print(party_people)
+
 print(len(party_people))
