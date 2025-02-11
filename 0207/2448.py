@@ -15,7 +15,7 @@ def add_space(row1,row2,row3,space):
     row1 = " "*space + row1
     row2 = " "*space + row2
     row3 = " "*space + row3
-    return(row1,row2,row3)
+    return(row1,row2,row3) 
 
 matrix = [[] for _ in range (N)]
 print(matrix)
