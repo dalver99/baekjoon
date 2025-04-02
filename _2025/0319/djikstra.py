@@ -31,7 +31,6 @@ def dijkstra(X):
 dijkstra(X)
 answer = distance[:]
 distance = [INF] * (N + 1)
-print(answer)
 
 for i in range(1, N + 1):
     if i != X:
