@@ -1,0 +1,6 @@
+first = int(input())
+second = int(input())
+print(first*(int(second%10)))
+print(first*(int(str(second)[1])))
+print(first*(int(str(second)[0])))
+print(first*second)
