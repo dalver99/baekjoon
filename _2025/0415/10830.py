@@ -4,4 +4,5 @@ N,B = map(int,input().split())
 
 
 def mat_mul(A,B):
-    
+    for i in range (N):
+        for j in range (N):
